@@ -1,75 +1,64 @@
 #include <iostream>
-#include <cstdio>
 using namespace std;
 
 int main() {
 
-    int childrenAmount;
-    cin >> childrenAmount;
-    int everySize[childrenAmount];
-    int childrenSize;
+    int availablebooks;
 
-    int i = 0;
-    while(cin >> childrenSize){
-        everySize[i] = childrenSize;
-        i++;
 
-        if (i == childrenAmount) {
-            break;
+    while (cin >> availablebooks) {
+        int booksprices[availablebooks];
+        int i = 0;
+
+        while (i < availablebooks) {
+            cin >> booksprices[i];
+            i++;
+
+        }
+
+        for (int i = 0; i < availablebooks; i++) {
+            int bookprice = booksprices[i];
+            int previousbookprice = i - 1;
+            while (previousbookprice >= 0 && booksprices[previousbookprice] > bookprice) {
+                booksprices[previousbookprice + 1] = booksprices[previousbookprice];
+                previousbookprice--;
+            }
+            booksprices[previousbookprice + 1] = bookprice;
+        }
+
+        int amountofmoney;
+        cin >> amountofmoney;
+
+
+        if (availablebooks == 2) {
+            cout << "Peter should buy books whose prices are " << booksprices[0] << " and " << booksprices[1] << "."
+                 << endl;
+            cout << "\n";
+        } else {
+            int book1;
+            int book2;
+            int differenceofprices = 1000002;
+            for (int i = 0; i < availablebooks - 1; i++) {
+                for (int j = 1; j < availablebooks; j++) {
+                    if (booksprices[i] + booksprices[j] == amountofmoney) {
+                        if ((booksprices[j] - booksprices[i]) < differenceofprices) {
+                            book1 = booksprices[i];
+                            book2 = booksprices[j];
+                            differenceofprices = book2 - book1;
+                            if (differenceofprices < 0) {
+                                differenceofprices = differenceofprices * (-1);
+                                int temp = book1;
+                                book1 = book2;
+                                book2 = temp;
+                            }
+
+                        }
+                    }
+                }
+            }
+            cout << "Peter should buy books whose prices are " << book1 << " and " << book2 << "." << endl;
+            cout << "\n";
         }
     }
-
-            for (int i = 1; i < childrenAmount; i++) {
-                int value = everySize[i];
-                int pastvalue = i-1;
-                while (pastvalue >= 0 && everySize[pastvalue] > value) {
-                    everySize[pastvalue+1] = everySize[pastvalue];
-                    pastvalue--;
-                }
-                everySize[pastvalue+1] = value;
-        }
-
-            int everySize2[(sizeof(everySize))/4];
-
-
-        everySize2[childrenAmount / 2] = everySize[childrenAmount - 1];
-
-        if (childrenAmount % 2 != 0) {
-            for (int i = 0, j = i + 1, ii = 0, jj = 1;
-                 j < childrenAmount - 1; i++, j++, ii++, jj++) {
-
-                everySize2[childrenAmount - jj] = everySize[i];
-                everySize2[ii] = everySize[j];
-                i++;
-                j++;
-
-            }
-        } else {
-            for (int i = 0, j = i + 1, ii = 0, jj = 1;
-                 j < childrenAmount - 1; i++, j++, ii++, jj++) {
-
-                if(ii != childrenAmount/2) {
-
-                    everySize2[childrenAmount - jj] = everySize[i];
-                    everySize2[ii] = everySize[j];
-                    i++;
-                    j++;
-                } else {
-                    ii++;
-                    everySize2[ii] = everySize[j];
-                }
-            }
-        }
-
-            for (int i = 0; i < childrenAmount; i++) {
-                cout << everySize2[i] + " ";
-            }
-
-
-
-
-
-
-
 
 }
