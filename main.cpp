@@ -1,64 +1,38 @@
 #include <iostream>
 using namespace std;
 
-int main() {
+struct word {
+    string key;
+    string name[101];
 
-    int availablebooks;
+};
 
+int h(string key);
 
-    while (cin >> availablebooks) {
-        int booksprices[availablebooks];
-        int i = 0;
+int printASCII (char c) {
+    int i = c;
+    return i;
+}
 
-        while (i < availablebooks) {
-            cin >> booksprices[i];
-            i++;
+int Hash(string key) {
+    return h(key) % 101;
+}
 
-        }
+int h(string key) {
+    int sum;
 
-        for (int i = 0; i < availablebooks; i++) {
-            int bookprice = booksprices[i];
-            int previousbookprice = i - 1;
-            while (previousbookprice >= 0 && booksprices[previousbookprice] > bookprice) {
-                booksprices[previousbookprice + 1] = booksprices[previousbookprice];
-                previousbookprice--;
-            }
-            booksprices[previousbookprice + 1] = bookprice;
-        }
-
-        int amountofmoney;
-        cin >> amountofmoney;
-
-
-        if (availablebooks == 2) {
-            cout << "Peter should buy books whose prices are " << booksprices[0] << " and " << booksprices[1] << "."
-                 << endl;
-            cout << "\n";
-        } else {
-            int book1;
-            int book2;
-            int differenceofprices = 1000002;
-            for (int i = 0; i < availablebooks - 1; i++) {
-                for (int j = 1; j < availablebooks; j++) {
-                    if (booksprices[i] + booksprices[j] == amountofmoney) {
-                        if ((booksprices[j] - booksprices[i]) < differenceofprices) {
-                            book1 = booksprices[i];
-                            book2 = booksprices[j];
-                            differenceofprices = book2 - book1;
-                            if (differenceofprices < 0) {
-                                differenceofprices = differenceofprices * (-1);
-                                int temp = book1;
-                                book1 = book2;
-                                book2 = temp;
-                            }
-
-                        }
-                    }
-                }
-            }
-            cout << "Peter should buy books whose prices are " << book1 << " and " << book2 << "." << endl;
-            cout << "\n";
-        }
+    for (int i = 1; i <= key.length(); i++) {
+       int j = 0;
+        sum = sum + (printASCII(key.at(j)) * i);
     }
 
+    sum = sum*19;
+    return sum;
+}
+
+
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
 }
