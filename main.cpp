@@ -9,12 +9,12 @@ struct words {
 
 int Hash(string key);
 int h(string key);
-void insert(string key);
-bool insertaftercollision(string key, int freepos);
-int find(string key);
-int findaftercollision(string key, int newpos);
-void deletekey (string key);
-bool deletekeyaftercollision (string key, int newpos);
+void insert(struct words Word, string key);
+bool insertaftercollision(struct words Word, string key, int freepos);
+int find(struct words Word, string key);
+int findaftercollision(struct words Word, string key, int newpos);
+void deletekey (struct words Word, string key);
+bool deletekeyaftercollision (struct words Word, string key, int newpos);
 
 
 int Hash(string key) {
@@ -36,15 +36,15 @@ int collisions(string key, int j) {
     return freepos;
 }
 
-void insert(string key) {
+void insert(struct words Word, string key) {
     int pos = Hash(key);
-    if (words.name[pos] == NULL) {
-        words.name[pos] = &key;
+    if (Word.name[pos] == NULL) {
+        Word.name[pos] = &key;
     } else {
         bool inserted = false;
         for (int i = 1; i <= 20; i++) {
             int freepos = collisions(key, i);
-            inserted = insertaftercollision(key, freepos);
+            inserted = insertaftercollision(Word, key, freepos);
             if (inserted == true) {
                 break;
             }
@@ -52,9 +52,9 @@ void insert(string key) {
     }
 }
 
-bool insertaftercollision(string key, int freepos) {
-    if (words.name[freepos] == NULL) {
-        words.name[freepos]= &key;
+bool insertaftercollision(struct words Word, string key, int freepos) {
+    if (Word.name[freepos] == NULL) {
+        Word.name[freepos]= &key;
         return true;
     } else {
         return false;
@@ -63,7 +63,7 @@ bool insertaftercollision(string key, int freepos) {
 }
 
 
-int find(string key) {
+int find(struct words Word, string key) {
     int index = Hash(key);
     if (words.name[index] == &key) {
         return index;
@@ -71,7 +71,7 @@ int find(string key) {
         int found = 0;
         for (int i = 1; i <= 101; i++) {
             int newpos = collisions(key, i);
-            found = findaftercollision(key, newpos);
+            found = findaftercollision(Word, key, newpos);
             if (found != -1) {
                 return newpos;
             }
@@ -79,24 +79,24 @@ int find(string key) {
     }
 }
 
-int findaftercollision(string key, int newpos) {
-    if (words.name[newpos] == &key) {
+int findaftercollision(struct words Word, string key, int newpos) {
+    if (Word.name[newpos] == &key) {
         return newpos;
     } else {
         return -1;
     }
 }
 
-void deletekey (string key) {
-    int pos = find(key);
-    if (words.name[pos] == &key) {
-        words.name[pos] == NULL;
-        delete words.name[pos];
+void deletekey (struct words Word, string key) {
+    int pos = find(Word, key);
+    if (Word.name[pos] == &key) {
+        delete Word.name[pos];
+        Word.name[pos] == NULL;
     } else {
         bool deleted = false;
         for (int i = 1; i <= 101; i++) {
             int newpos = collisions(key, i);
-            deleted = deletekeyaftercollision(key, newpos);
+            deleted = deletekeyaftercollision(Word, key, newpos);
             if (deleted == true) {
                 break;
             }
@@ -105,10 +105,10 @@ void deletekey (string key) {
 
 }
 
-bool deletekeyaftercollision (string key, int newpos) {
-    if (words.name[newpos] == &key) {
-        words.name[newpos] = NULL;
-        delete words.name[newpos];
+bool deletekeyaftercollision (struct words Word, string key, int newpos) {
+    if (Word.name[newpos] == &key) {
+        delete Word.name[newpos];
+        Word.name[newpos] = NULL;
         return true;
     } else {
         return false;
@@ -136,12 +136,12 @@ int main() {
                 int size = operation.length();
                 size = size-4;
                 string word = operation.substr(4,size);
-                insert(word);
+                insert(Word, word);
             } else {
                 int size = operation.length();
                 size = size-4;
                 string word = operation.substr(4,size);
-                deletekey(word);
+                deletekey(Word, word);
             }
         }
 
