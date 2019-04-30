@@ -1,113 +1,71 @@
 import java.util.*;
 
-class Pilha {
+public class Heap {
+    public Vector<Integer> heap;
 
-    private Pilha top;
-    private Pilha next;
-    private int size;
-    private int length;
-    private char bracket;
-    private Pilha previous;
-
-
-    Pilha() {
-        this.next = null;
-        this.previous = null;
-        this.top = null;
-        this.bracket = 0;
-        this.size = 0;
-        this.length = 0;
-
+    public Heap() {
+        heap =  new Vector<Integer>();
     }
 
-    public void setBracket(char bracket) {
-        this.bracket = bracket;
-    }
-
-
-    public void setPrevious(Pilha previous) {
-        this.previous = previous;
-    }
-
-    public Pilha getPrevious() {
-        return previous;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public char getBracket() {
-        return bracket;
-    }
-
-
-    public void push() {
-        if (top.getBracket() == 0) {
-            System.err.print("Não há nada para remover.");
+    public void heapify(int number) {
+        if (this.heap.get(1) == null) {
+            this.heap.add(0);
+            this.heap.add(number);
         } else {
-            top = top.getPrevious();
+            (this.heap).add(number);
         }
-
+        for (int i = (this.heap).size()/2; i > 0; i--) {
+            int value = heap.get(i);
+            int length = (this.heap).size()-1;
+            int v = heap.get(i);
+            int j = 0;
+            boolean isHeap = false;
+            while (!isHeap && 2*i <= length) {
+                j = 2*i;
+                if (j < length) {
+                    if (heap.get(j) < heap.get(j+1)) {
+                        j++;
+                    }
+                }
+                if (v >= heap.get(j)) {
+                    isHeap = true;
+                }
+                else {
+                    heap.set(i, heap.get(j));
+                    i = j;
+                }
+            }
+            heap.set(i, v);
+        }
     }
 
-    public void pop(char bracket) {
-        Pilha newbracket = new Pilha();
-        newbracket.setBracket(bracket);
-        newbracket.setPrevious(top);
-        top =  newbracket;
-        size = size++;
-
+    public Integer returnmax() {
+        return heap.get(1);
     }
 
-    public void verify() {
-        if (top.getBracket() == '(') {
-            top.push();
-        }
+    public void removemax() {
+        heap.set(1, heap.get(heap.size()));
+        heap.setSize(heap.size());
+    }
 
-        if (top.getBracket() == ')') {
-            if (top.getPrevious().getBracket() == '(') {
-                length++;
-            } else {
-                previous.verify();
+    public static void main(String[] args) {
+    Scanner in = new Scanner(System.in);
+
+        Heap heapvalores = new Heap();
+
+        while (in.hasNext()) {
+            String operation =  in.nextLine();
+
+            if (operation.charAt(0) == 'i') {
+                String sNumber = operation.substring(7, operation.length()-1);
+                int number = Integer.parseInt(sNumber);
+                heapvalores.heapify(number);
+            }
+            else {
+                heapvalores.returnmax();
+
             }
         }
-    }
-
-
-
-    public boolean isEmpty() {
-        if (top == null) {
-            return true;
-        }
-        return false;
-    }
-
-    public static void main (String[] args) {
-        Scanner in = new Scanner(System.in);
-
-        Pilha pilha = new Pilha();
-
-        String bracketline = in.nextLine();
-
-        for (int i = 0; i < bracketline.length(); i++) {
-            pilha.pop(bracketline.charAt(i));
-        }
-
-        for (int i = 0; i < bracketline.length(); i++) {
-            if (bracketline.charAt(0) ==')') {
-
-            }
-        }
-
-        pilha.verify();
 
     }
 }
-
-
-
-
-
-
-
